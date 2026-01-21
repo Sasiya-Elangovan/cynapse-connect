@@ -10,7 +10,7 @@ const socialLinks = [
 
 const Footer = () => {
   return (
-    <footer className="relative py-16 border-t border-border/50">
+    <footer className="relative py-16 border-t border-primary/20">
       {/* Gradient Line */}
       <div 
         className="absolute top-0 left-0 right-0 h-px"
@@ -27,7 +27,11 @@ const Footer = () => {
             viewport={{ once: true }}
             className="mb-6"
           >
-            <span className="font-display text-3xl font-bold text-gradient">CYNAPSE 2K26</span>
+            <span className="font-display text-4xl font-black">
+              <span className="text-neon-pink">CYN</span>
+              <span className="text-neon-green">APSE</span>
+              <span className="text-foreground/80 text-2xl ml-2">2K26</span>
+            </span>
           </motion.div>
 
           {/* College Info */}
@@ -38,7 +42,7 @@ const Footer = () => {
             viewport={{ once: true }}
             className="mb-8"
           >
-            <p className="text-foreground/90 font-medium">
+            <p className="text-foreground/90 font-semibold">
               Department of Computer Science & Engineering
             </p>
             <p className="text-muted-foreground">RMK Engineering College</p>
@@ -52,12 +56,16 @@ const Footer = () => {
             viewport={{ once: true }}
             className="flex items-center gap-4 mb-8"
           >
-            {socialLinks.map((social) => (
+            {socialLinks.map((social, index) => (
               <a
                 key={social.label}
                 href={social.href}
                 aria-label={social.label}
-                className="w-10 h-10 rounded-full glass flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/30 transition-all duration-300"
+                className={`w-10 h-10 rounded-full glass flex items-center justify-center transition-all duration-300 ${
+                  index % 2 === 0 
+                    ? 'text-muted-foreground hover:text-primary hover:border-primary/50 hover:shadow-[0_0_20px_hsl(330_100%_60%/0.3)]'
+                    : 'text-muted-foreground hover:text-secondary hover:border-secondary/50 hover:shadow-[0_0_20px_hsl(120_100%_50%/0.3)]'
+                }`}
               >
                 <social.icon className="w-5 h-5" />
               </a>

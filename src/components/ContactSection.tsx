@@ -9,12 +9,14 @@ const organizers = [
     role: 'Event Coordinator',
     phone: '+91 98765 43210',
     email: 'rithuparan@rmkec.ac.in',
+    color: 'pink',
   },
   {
     name: 'Agila',
     role: 'Event Coordinator',
     phone: '+91 98765 43211',
     email: 'agila@rmkec.ac.in',
+    color: 'green',
   },
 ];
 
@@ -25,7 +27,8 @@ const ContactSection = () => {
   return (
     <section id="contact" className="py-24 md:py-32 relative overflow-hidden">
       {/* Background */}
-      <div className="floating-orb w-72 h-72 bg-primary/10 top-0 left-1/4 animate-pulse-slow" />
+      <div className="floating-orb w-72 h-72 bg-primary/15 top-0 left-1/4 animate-pulse-slow" />
+      <div className="floating-orb w-64 h-64 bg-secondary/10 bottom-0 right-1/4 animate-pulse-slow" style={{ animationDelay: '2s' }} />
 
       <div className="container mx-auto px-6" ref={ref}>
         <motion.div
@@ -48,22 +51,36 @@ const ContactSection = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="glass-card p-6 text-center"
+              className={`glass-card p-6 text-center transition-all duration-500 ${
+                organizer.color === 'green' 
+                  ? 'border-secondary/30 hover:border-secondary/60 hover:shadow-[0_0_40px_hsl(120_100%_50%/0.2)]'
+                  : 'border-primary/30 hover:border-primary/60 hover:shadow-[0_0_40px_hsl(330_100%_60%/0.2)]'
+              }`}
             >
-              <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                <span className="font-display text-2xl font-bold text-gradient">
+              <div className={`w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center ${
+                organizer.color === 'green' 
+                  ? 'bg-gradient-to-br from-secondary/20 to-accent/20' 
+                  : 'bg-gradient-to-br from-primary/20 to-accent/20'
+              }`}>
+                <span className={`font-display text-3xl font-black ${
+                  organizer.color === 'green' ? 'text-neon-green' : 'text-neon-pink'
+                }`}>
                   {organizer.name.charAt(0)}
                 </span>
               </div>
-              <h3 className="font-display text-xl font-semibold mb-1">{organizer.name}</h3>
-              <p className="text-primary/80 text-sm mb-4">{organizer.role}</p>
+              <h3 className="font-display text-xl font-bold mb-1 text-foreground">{organizer.name}</h3>
+              <p className={`text-sm font-semibold mb-4 uppercase tracking-wider ${
+                organizer.color === 'green' ? 'text-secondary' : 'text-primary'
+              }`}>
+                {organizer.role}
+              </p>
               <div className="space-y-2 text-sm text-muted-foreground">
                 <div className="flex items-center justify-center gap-2">
-                  <Phone className="w-4 h-4 text-primary/60" />
+                  <Phone className={`w-4 h-4 ${organizer.color === 'green' ? 'text-secondary/60' : 'text-primary/60'}`} />
                   <span>{organizer.phone}</span>
                 </div>
                 <div className="flex items-center justify-center gap-2">
-                  <Mail className="w-4 h-4 text-primary/60" />
+                  <Mail className={`w-4 h-4 ${organizer.color === 'green' ? 'text-secondary/60' : 'text-primary/60'}`} />
                   <span>{organizer.email}</span>
                 </div>
               </div>
@@ -75,13 +92,13 @@ const ContactSection = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="glass-card p-6 text-center lg:col-span-1"
+            className="glass-card p-6 text-center lg:col-span-1 border-accent/30 hover:border-accent/60 transition-all duration-500 hover:shadow-[0_0_40px_hsl(280_100%_65%/0.2)]"
           >
-            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-secondary/20 to-primary/20 flex items-center justify-center">
-              <MapPin className="w-8 h-8 text-gradient" />
+            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-accent/20 to-primary/20 flex items-center justify-center">
+              <MapPin className="w-8 h-8 text-neon-purple" />
             </div>
-            <h3 className="font-display text-xl font-semibold mb-1">Venue</h3>
-            <p className="text-primary/80 text-sm mb-4">RMK Engineering College</p>
+            <h3 className="font-display text-xl font-bold mb-1 text-foreground">Venue</h3>
+            <p className="text-sm font-semibold mb-4 text-accent uppercase tracking-wider">RMK Engineering College</p>
             <p className="text-sm text-muted-foreground leading-relaxed">
               RSM Nagar, Kavaraipettai<br />
               Chennai - 601 206<br />
