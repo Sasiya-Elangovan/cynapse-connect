@@ -43,7 +43,7 @@ const HeroSection = () => {
             <span className="text-sm font-bold uppercase tracking-wider">9th February 2026</span>
           </motion.div>
 
-          {/* Main Title - Hacksprint style stacked text */}
+          {/* Main Title - Hacksprint style single line */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -51,11 +51,9 @@ const HeroSection = () => {
             className="mb-6"
           >
             <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-black leading-none">
-              <span className="block text-neon-pink">CYN</span>
-              <span className="block text-neon-green">APSE</span>
-              <span className="block text-4xl md:text-5xl lg:text-6xl mt-2 text-foreground/90 font-bold">
-                2K26
-              </span>
+              <span className="text-neon-pink">CYN</span>
+              <span className="text-neon-green">APSE</span>
+              <span className="text-foreground/90">2K26</span>
             </h1>
           </motion.div>
 
