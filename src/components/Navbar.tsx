@@ -5,6 +5,7 @@ import { Menu, X } from 'lucide-react';
 const navLinks = [
   { name: 'About', href: '#about' },
   { name: 'Events', href: '#events' },
+  { name: 'Bus Route', href: '#bus-route' },
   { name: 'Contact', href: '#contact' },
 ];
 
@@ -33,6 +34,7 @@ const Navbar = () => {
         <a href="#" className="font-display text-xl font-black">
           <span className="text-neon-pink">CYN</span>
           <span className="text-neon-green">APSE</span>
+          <span className="text-foreground">2K26</span>
         </a>
 
         {/* Desktop Navigation */}
