@@ -69,29 +69,6 @@ const AboutSection = () => {
           ))}
         </div>
 
-        {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="mt-16 glass-card p-8 md:p-10"
-        >
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {[
-              { value: '1000+', label: 'Participants' },
-              { value: '20+', label: 'Events' },
-              { value: '50+', label: 'Colleges' },
-              { value: '₹1L+', label: 'Prize Pool' },
-            ].map((stat, index) => (
-              <div key={stat.label}>
-                <div className="font-display text-3xl md:text-4xl font-bold text-gradient mb-1">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
       </div>
     </section>
   );
