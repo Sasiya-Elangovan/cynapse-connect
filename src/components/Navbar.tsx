@@ -30,8 +30,9 @@ const Navbar = () => {
       }`}
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
-        <a href="#" className="font-display text-xl font-bold text-gradient">
-          CYNAPSE
+        <a href="#" className="font-display text-xl font-black">
+          <span className="text-neon-pink">CYN</span>
+          <span className="text-neon-green">APSE</span>
         </a>
 
         {/* Desktop Navigation */}
@@ -41,7 +42,7 @@ const Navbar = () => {
               {link.name}
             </a>
           ))}
-          <a href="#events" className="btn-primary text-sm">
+          <a href="#events" className="btn-primary text-sm py-2 px-6">
             Register Now
           </a>
         </div>
@@ -62,14 +63,14 @@ const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass mt-3 mx-4 rounded-2xl overflow-hidden"
+            className="md:hidden glass mt-3 mx-4 rounded-2xl overflow-hidden border-primary/20"
           >
             <div className="p-6 flex flex-col gap-4">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
-                  className="text-muted-foreground hover:text-foreground transition-colors py-2"
+                  className="text-muted-foreground hover:text-foreground transition-colors py-2 uppercase tracking-wider font-medium text-sm"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {link.name}
