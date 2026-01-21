@@ -1,9 +1,8 @@
 import { motion } from 'framer-motion';
-import { Instagram, Linkedin, Mail, Globe } from 'lucide-react';
+import { Instagram, Mail, Globe } from 'lucide-react';
 
 const socialLinks = [
-  { icon: Instagram, href: '#', label: 'Instagram' },
-  { icon: Linkedin, href: '#', label: 'LinkedIn' },
+  { icon: Instagram, href: 'https://www.instagram.com/cynapse2k26?igsh=MWI3ZjRmYXB3a3Z5NA==', label: 'Instagram' },
   { icon: Mail, href: 'mailto:cse@rmkec.ac.in', label: 'Email' },
   { icon: Globe, href: '#', label: 'Website' },
 ];

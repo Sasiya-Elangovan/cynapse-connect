@@ -7,15 +7,15 @@ const organizers = [
   {
     name: 'Rithuparan',
     role: 'Event Coordinator',
-    phone: '+91 98765 43210',
+    phone: '+91 91506 24440',
     email: 'rithuparan@rmkec.ac.in',
     color: 'pink',
   },
   {
-    name: 'Agila',
+    name: 'Akila',
     role: 'Event Coordinator',
-    phone: '+91 98765 43211',
-    email: 'agila@rmkec.ac.in',
+    phone: '+91 89253 99098',
+    email: 'akila@rmkec.ac.in',
     color: 'green',
   },
 ];

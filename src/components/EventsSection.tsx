@@ -164,7 +164,7 @@ const EventsSection = () => {
         </motion.div>
 
         {/* Events Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {events.map((event, index) => {
             const IconComponent = event.icon;
             const colors = getColorClasses(event.color);
@@ -217,6 +217,22 @@ const EventsSection = () => {
             );
           })}
         </div>
+
+        {/* Non-Technical Events Coming Soon */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="glass-card p-8 text-center border-accent/30 hover:border-accent/60 transition-all duration-500 hover:shadow-[0_0_40px_hsl(280_100%_65%/0.2)]"
+        >
+          <span className="badge-technical mb-4 inline-block">Coming Soon</span>
+          <h3 className="font-display text-2xl md:text-3xl font-bold text-gradient mb-2">
+            Non Technical Events
+          </h3>
+          <p className="text-muted-foreground">
+            Stay tuned for exciting non-technical events!
+          </p>
+        </motion.div>
       </div>
 
       {/* Event Details Modal */}
