@@ -6,10 +6,12 @@ import EventsSection from '@/components/EventsSection';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 import CursorGlow from '@/components/CursorGlow';
+import ScrollProgress from '@/components/ScrollProgress';
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
+      <ScrollProgress />
       <CursorGlow />
       <Navbar />
       <HeroSection />
