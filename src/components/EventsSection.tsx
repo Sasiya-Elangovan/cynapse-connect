@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef, useState } from 'react';
 import { Clock, Users, User, Code, FileText, Bug, HelpCircle, ExternalLink } from 'lucide-react';
@@ -109,9 +109,16 @@ const events = [
 ];
 
 const EventsSection = () => {
-  const ref = useRef(null);
+  const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [selectedEvent, setSelectedEvent] = useState<typeof events[0] | null>(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  });
+
+  const backgroundY = useTransform(scrollYProgress, [0, 1], [0, -80]);
 
   const getColorClasses = (color: string) => {
     switch (color) {
@@ -121,7 +128,7 @@ const EventsSection = () => {
           icon: 'text-secondary',
           iconBg: 'bg-secondary/10 group-hover:bg-secondary/20',
           border: 'border-secondary/30 hover:border-secondary/60',
-          glow: 'hover:shadow-[0_0_40px_hsl(120_100%_50%/0.2)]',
+          glow: 'hover:shadow-[0_0_50px_hsl(120_100%_50%/0.25)]',
         };
       case 'purple':
         return {
@@ -129,7 +136,7 @@ const EventsSection = () => {
           icon: 'text-accent',
           iconBg: 'bg-accent/10 group-hover:bg-accent/20',
           border: 'border-accent/30 hover:border-accent/60',
-          glow: 'hover:shadow-[0_0_40px_hsl(280_100%_65%/0.2)]',
+          glow: 'hover:shadow-[0_0_50px_hsl(280_100%_65%/0.25)]',
         };
       default:
         return {
@@ -137,25 +144,66 @@ const EventsSection = () => {
           icon: 'text-primary',
           iconBg: 'bg-primary/10 group-hover:bg-primary/20',
           border: 'border-primary/30 hover:border-primary/60',
-          glow: 'hover:shadow-[0_0_40px_hsl(330_100%_60%/0.2)]',
+          glow: 'hover:shadow-[0_0_50px_hsl(330_100%_60%/0.25)]',
         };
     }
   };
 
-  return (
-    <section id="events" className="py-24 md:py-32 relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="floating-orb w-80 h-80 bg-primary/15 -left-40 top-1/3 animate-pulse-slow" />
-      <div className="floating-orb w-64 h-64 bg-secondary/15 right-0 bottom-1/4 animate-pulse-slow" style={{ animationDelay: '1s' }} />
-      <div className="floating-orb w-56 h-56 bg-accent/10 right-1/4 top-1/4 animate-float" />
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.12,
+        delayChildren: 0.2,
+      },
+    },
+  };
 
-      <div className="container mx-auto px-6" ref={ref}>
+  const cardVariants = {
+    hidden: (index: number) => ({
+      opacity: 0,
+      x: index % 2 === 0 ? -60 : 60,
+      y: 20,
+    }),
+    visible: {
+      opacity: 1,
+      x: 0,
+      y: 0,
+      transition: {
+        duration: 0.7,
+        ease: 'easeOut' as const,
+      },
+    },
+  };
+
+  return (
+    <section id="events" ref={ref} className="py-24 md:py-32 relative overflow-hidden">
+      {/* Background Elements with parallax */}
+      <motion.div 
+        style={{ y: backgroundY }}
+        className="absolute inset-0 pointer-events-none"
+      >
+        <div className="floating-orb w-[400px] h-[400px] bg-primary/15 -left-48 top-1/3" />
+        <div className="floating-orb w-80 h-80 bg-secondary/15 right-0 bottom-1/4" />
+        <div className="floating-orb w-64 h-64 bg-accent/10 right-1/4 top-1/4" />
+      </motion.div>
+
+      <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
+          <motion.span 
+            className="inline-block text-primary font-bold uppercase tracking-widest text-sm mb-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.1 }}
+          >
+            What Awaits You
+          </motion.span>
           <h2 className="section-heading">Technical Events</h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Compete in our flagship technical events and prove your expertise. 
@@ -164,37 +212,46 @@ const EventsSection = () => {
         </motion.div>
 
         {/* Events Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16"
+          variants={containerVariants}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+        >
           {events.map((event, index) => {
             const IconComponent = event.icon;
             const colors = getColorClasses(event.color);
             return (
               <motion.div
                 key={event.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className={`glass-card p-6 group cursor-pointer transition-all duration-500 ${colors.border} ${colors.glow}`}
+                custom={index}
+                variants={cardVariants}
+                className={`glass-card p-8 group cursor-pointer transition-all duration-500 ${colors.border} ${colors.glow}`}
                 onClick={() => setSelectedEvent(event)}
+                whileHover={{ y: -8, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                <div className="flex items-start justify-between mb-4">
+                <div className="flex items-start justify-between mb-6">
                   <div>
                     <span className={`${colors.badge} mb-3 inline-block`}>Technical</span>
-                    <h3 className="font-display text-2xl font-bold text-foreground group-hover:text-gradient transition-all duration-300">
+                    <h3 className="font-display text-2xl md:text-3xl font-bold text-foreground group-hover:text-gradient transition-all duration-300">
                       {event.title}
                     </h3>
-                    <p className={`text-sm font-semibold ${colors.icon}`}>{event.subtitle}</p>
+                    <p className={`text-sm font-semibold ${colors.icon} mt-1`}>{event.subtitle}</p>
                   </div>
-                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${colors.iconBg} transition-colors`}>
-                    <IconComponent className={`w-6 h-6 ${colors.icon}`} />
-                  </div>
+                  <motion.div 
+                    className={`w-14 h-14 rounded-2xl flex items-center justify-center ${colors.iconBg} transition-all duration-300`}
+                    whileHover={{ rotate: 10, scale: 1.1 }}
+                  >
+                    <IconComponent className={`w-7 h-7 ${colors.icon}`} />
+                  </motion.div>
                 </div>
 
-                <p className="text-muted-foreground text-sm leading-relaxed mb-6">
+                <p className="text-muted-foreground text-sm leading-relaxed mb-8">
                   {event.description}
                 </p>
 
-                <div className="flex items-center gap-4 mb-6 text-sm text-muted-foreground">
+                <div className="flex items-center gap-6 mb-6 text-sm text-muted-foreground">
                   <div className="flex items-center gap-2">
                     <Clock className={`w-4 h-4 ${colors.icon} opacity-60`} />
                     <span>{event.duration}</span>
@@ -209,27 +266,43 @@ const EventsSection = () => {
                   </div>
                 </div>
 
-                <div className={`inline-flex items-center gap-2 ${colors.icon} font-bold text-sm uppercase tracking-wider`}>
+                <motion.div 
+                  className={`inline-flex items-center gap-2 ${colors.icon} font-bold text-sm uppercase tracking-wider`}
+                  whileHover={{ x: 5 }}
+                >
                   View Details
                   <ExternalLink className="w-4 h-4" />
-                </div>
+                </motion.div>
               </motion.div>
             );
           })}
-        </div>
+        </motion.div>
 
         {/* Non-Technical Events Coming Soon */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="glass-card p-8 text-center border-accent/30 hover:border-accent/60 transition-all duration-500 hover:shadow-[0_0_40px_hsl(280_100%_65%/0.2)]"
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="glass-card p-12 text-center border-accent/30 hover:border-accent/60 transition-all duration-500 hover:shadow-[0_0_60px_hsl(280_100%_65%/0.25)]"
+          whileHover={{ scale: 1.01 }}
         >
-          <span className="badge-technical mb-4 inline-block">Coming Soon</span>
-          <h3 className="font-display text-2xl md:text-3xl font-bold text-gradient mb-2">
+          <motion.span 
+            className="badge-technical mb-6 inline-block"
+            animate={{ 
+              boxShadow: [
+                '0 0 20px hsl(330 100% 60% / 0.3)',
+                '0 0 40px hsl(330 100% 60% / 0.5)',
+                '0 0 20px hsl(330 100% 60% / 0.3)',
+              ]
+            }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            Coming Soon
+          </motion.span>
+          <h3 className="font-display text-3xl md:text-4xl font-bold text-gradient mb-4">
             Non Technical Events
           </h3>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-lg">
             Stay tuned for exciting non-technical events!
           </p>
         </motion.div>
@@ -300,14 +373,16 @@ const EventsSection = () => {
                   </div>
                 </div>
 
-                <a
+                <motion.a
                   href={selectedEvent.formLink}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-primary block w-full text-center"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   Register Now
-                </a>
+                </motion.a>
               </div>
             </>
           )}
